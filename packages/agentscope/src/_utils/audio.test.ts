@@ -1,4 +1,4 @@
-import { _buildStreamingWavHeader } from './audio';
+import { _buildStreamingWavHeader, _buildWav } from './audio';
 
 describe('_buildStreamingWavHeader', () => {
     test('matches the Python default 44-byte WAV header', () => {
@@ -17,5 +17,18 @@ describe('_buildStreamingWavHeader', () => {
         expect(view.getUint32(28, true)).toBe(96_000);
         expect(view.getUint16(32, true)).toBe(6);
         expect(view.getUint16(34, true)).toBe(24);
+    });
+});
+
+describe('_buildWav', () => {
+    test('writes finite RIFF and data sizes around the PCM payload', () => {
+        const wav = _buildWav(Buffer.from('AUDIO'), 16_000, 2, 16);
+        const view = new DataView(wav.buffer, wav.byteOffset, wav.byteLength);
+
+        expect(wav).toHaveLength(49);
+        expect(Buffer.from(wav.subarray(0, 4)).toString()).toBe('RIFF');
+        expect(view.getUint32(4, true)).toBe(41);
+        expect(view.getUint32(40, true)).toBe(5);
+        expect(Buffer.from(wav.subarray(44)).toString()).toBe('AUDIO');
     });
 });
