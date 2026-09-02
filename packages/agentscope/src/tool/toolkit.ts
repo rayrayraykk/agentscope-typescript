@@ -133,12 +133,13 @@ Usage:
                     !disabledTools.includes(tool.name)
             )
             .forEach(tool => {
-                this.tools.push({
-                    type: 'mcp',
-                    mcpName: client.name,
-                    ...tool,
-                    requireUserConfirm,
-                });
+                this.tools.push(
+                    Object.assign(tool, {
+                        type: 'mcp' as const,
+                        mcpName: client.name,
+                        requireUserConfirm,
+                    })
+                );
                 appendTools.push(tool.name);
             });
         console.log(`Registered tools from MCP client '${client.name}': ${appendTools.join(', ')}`);
