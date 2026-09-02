@@ -1,4 +1,10 @@
 export { ChatModelBase } from './base';
+export { AnthropicChatModel } from './anthropic-model';
+export type {
+    AnthropicChatModelOptions,
+    AnthropicClient,
+    AnthropicParameters,
+} from './anthropic-model';
 export { ModelCard, EmbeddingModelCard, TTSModelCard, createModelCard } from './card';
 export type {
     AnyModelCard,
