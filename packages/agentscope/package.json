@@ -93,6 +93,11 @@
             "types": "./dist/credential/index.d.ts",
             "import": "./dist/credential/index.mjs",
             "require": "./dist/credential/index.js"
+        },
+        "./embedding": {
+            "types": "./dist/embedding/index.d.ts",
+            "import": "./dist/embedding/index.mjs",
+            "require": "./dist/embedding/index.js"
         }
     },
     "scripts": {
