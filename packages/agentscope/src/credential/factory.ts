@@ -3,6 +3,7 @@
 import {
     registerChatModelResolver,
     registerEmbeddingModelResolver,
+    registerTTSModelResolver,
     type CredentialBase,
     type CredentialClass,
     type CredentialSchema,
@@ -82,4 +83,22 @@ registerEmbeddingModelResolver(async provider => {
         return (await import('../embedding/openai')).OpenAIEmbeddingModel;
     }
     throw new Error(`No embedding model class is registered for '${provider}'.`);
+});
+
+registerTTSModelResolver(async provider => {
+    if (provider === 'dashscope') {
+        const [
+            { DashScopeTTSModel },
+            { DashScopeRealtimeTTSModel },
+            { DashScopeCosyVoiceTTSModel },
+        ] = await Promise.all([
+            import('../tts/dashscope'),
+            import('../tts/dashscope-realtime'),
+            import('../tts/dashscope-cosyvoice'),
+        ]);
+        return [DashScopeTTSModel, DashScopeRealtimeTTSModel, DashScopeCosyVoiceTTSModel];
+    }
+    if (provider === 'gemini') return [(await import('../tts/gemini')).GeminiTTSModel];
+    if (provider === 'openai') return [(await import('../tts/openai')).OpenAITTSModel];
+    throw new Error(`No TTS model classes are registered for '${provider}'.`);
 });

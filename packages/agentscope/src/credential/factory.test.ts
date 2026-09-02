@@ -13,6 +13,7 @@ import {
 } from './providers';
 import { GeminiEmbeddingModel } from '../embedding/gemini';
 import { GeminiChatModel } from '../model/gemini-model';
+import { GeminiTTSModel } from '../tts/gemini';
 
 describe('CredentialFactory', () => {
     test('matches every Python credential JSON schema', () => {
@@ -82,6 +83,15 @@ describe('CredentialFactory', () => {
             }
         }
         expect(await new UnsupportedCredential().getEmbeddingModelClass()).toBeNull();
+    });
+
+    test('resolves Python-compatible TTS model classes lazily', async () => {
+        const credential = new GeminiCredential({ apiKey: 'secret' });
+        expect(await credential.getTTSModelClasses()).toEqual([GeminiTTSModel]);
+        expect(credential.listTTSModels()[0].parameterSchema).toHaveProperty(
+            'properties.voice.enum'
+        );
+        expect(await new OllamaCredential().getTTSModelClasses()).toEqual([]);
     });
 
     test('validates discriminators and required API keys', () => {
