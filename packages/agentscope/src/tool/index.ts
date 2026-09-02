@@ -47,4 +47,13 @@ export { WriteToolOptions, WriteTool, Write } from './write';
 export { EditToolOptions, EditTool, Edit } from './edit';
 export { GlobToolOptions, GlobTool, Glob } from './glob';
 export { GrepToolOptions, GrepTool, Grep } from './grep';
-export { TaskCreate, TaskUpdate, TaskGet, TaskList } from './task';
+export {
+    TaskCreateTool,
+    TaskGetTool,
+    TaskListTool,
+    TaskUpdateTool,
+    TaskCreate,
+    TaskUpdate,
+    TaskGet,
+    TaskList,
+} from './task';
