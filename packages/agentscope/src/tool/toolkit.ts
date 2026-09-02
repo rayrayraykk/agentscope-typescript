@@ -10,12 +10,13 @@ import { HTTPMCPClient } from '../mcp/http';
 import { StdioMCPClient } from '../mcp/stdio';
 import type { ToolCallBlock } from '../message/block';
 import type { ToolInputSchema, ToolSchema } from '../type';
+import { ToolBase } from './base';
 import type { Tool } from './base';
 import { createToolResponse, isToolResponse, ToolChunk, ToolResponse } from './response';
 
 interface RegisteredTool extends Tool {
     type: 'function' | 'mcp';
-    mcpName?: string;
+    mcpName?: string | null;
 }
 
 /**
@@ -66,6 +67,10 @@ Usage:
         }
 
         tools.map(tool => {
+            if (tool instanceof ToolBase) {
+                this.tools.push(Object.assign(tool, { type: 'function' as const }));
+                return;
+            }
             this.tools.push({
                 type: 'function',
                 ...tool,
@@ -86,6 +91,10 @@ Usage:
      * @param tool
      */
     registerToolFunction(tool: Tool): Toolkit {
+        if (tool instanceof ToolBase) {
+            this.tools.push(Object.assign(tool, { type: 'function' as const }));
+            return this;
+        }
         this.tools.push({
             type: 'function',
             ...tool,
@@ -222,6 +231,15 @@ Usage:
                 });
                 yield textRes;
                 finalRes = textRes;
+            } else if (res instanceof ToolChunk) {
+                const chunkRes = createToolResponse({
+                    content: res.content,
+                    state: res.state === 'running' ? 'success' : res.state,
+                    metadata: res.metadata,
+                    isLast: res.isLast,
+                });
+                yield chunkRes;
+                finalRes = chunkRes;
             } else if (isToolResponse(res)) {
                 // If res is a ToolResponse
                 yield res as ToolResponse;

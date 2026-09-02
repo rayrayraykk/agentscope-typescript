@@ -42,7 +42,7 @@ export { Toolkit } from './toolkit';
 export { BashToolOptions, BashTool, Bash } from './bash';
 export { PowerShellToolOptions, PowerShellTool, PowerShell } from './powershell';
 export { BashCommandParser } from './bash-parser';
-export { Read } from './read';
+export { ReadToolOptions, ReadTool, Read } from './read';
 export { Write } from './write';
 export { Edit } from './edit';
 export { Glob } from './glob';
