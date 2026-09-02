@@ -260,6 +260,9 @@ importers:
             mime-types:
                 specifier: ^3.0.2
                 version: 3.0.2
+            minimatch:
+                specifier: ^10.2.6
+                version: 10.2.6
             ollama:
                 specifier: ^0.6.3
                 version: 0.6.3

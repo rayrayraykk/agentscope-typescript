@@ -45,6 +45,6 @@ export { BashCommandParser } from './bash-parser';
 export { ReadToolOptions, ReadTool, Read } from './read';
 export { WriteToolOptions, WriteTool, Write } from './write';
 export { EditToolOptions, EditTool, Edit } from './edit';
-export { Glob } from './glob';
-export { Grep } from './grep';
+export { GlobToolOptions, GlobTool, Glob } from './glob';
+export { GrepToolOptions, GrepTool, Grep } from './grep';
 export { TaskCreate, TaskUpdate, TaskGet, TaskList } from './task';
