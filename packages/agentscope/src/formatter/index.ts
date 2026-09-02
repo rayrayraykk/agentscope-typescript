@@ -12,5 +12,10 @@ export type {
     OpenAIFormatterOptions,
     OpenAIMultiAgentFormatterOptions,
 } from './openai-chat-formatter';
+export {
+    OpenAIResponseFormatter,
+    OpenAIResponseMultiAgentFormatter,
+} from './openai-response-formatter';
+export type { OpenAIResponseMultiAgentFormatterOptions } from './openai-response-formatter';
 export { XAIChatFormatter, XAIMultiAgentFormatter } from './xai-formatter';
 export type { XAIImage, XAIMessage, XAIToolCall } from './xai-formatter';
