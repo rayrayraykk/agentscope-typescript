@@ -3,6 +3,7 @@ export type { FormatterOptions, MessageGroup } from './base';
 export { AnthropicChatFormatter, AnthropicMultiAgentFormatter } from './anthropic-formatter';
 export { DashScopeChatFormatter, DashScopeMultiAgentFormatter } from './dashscope-chat-formatter';
 export { DeepSeekChatFormatter, DeepSeekMultiAgentFormatter } from './deepseek-chat-formatter';
+export { GeminiChatFormatter, GeminiMultiAgentFormatter } from './gemini-formatter';
 export { OllamaChatFormatter, OllamaMultiAgentFormatter } from './ollama-chat-formatter';
 export { OpenAIChatFormatter, OpenAIMultiAgentFormatter } from './openai-chat-formatter';
 export type {

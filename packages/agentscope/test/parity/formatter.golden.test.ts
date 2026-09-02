@@ -7,6 +7,8 @@ import {
     AnthropicChatFormatter,
     AnthropicMultiAgentFormatter,
     FormatterBase,
+    GeminiChatFormatter,
+    GeminiMultiAgentFormatter,
 } from '../../src/formatter';
 import { Msg, parseMsg } from '../../src/message';
 
@@ -43,6 +45,8 @@ function formatterCases(): Array<[string, FormatterBase, Msg[]]> {
     return [
         ['anthropic_chat', new AnthropicChatFormatter(), chat],
         ['anthropic_multi', new AnthropicMultiAgentFormatter(), multi],
+        ['gemini_chat', new GeminiChatFormatter(), chat],
+        ['gemini_multi', new GeminiMultiAgentFormatter(), multi],
     ];
 }
 
