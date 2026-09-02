@@ -22,6 +22,14 @@ export {
     ToolBaseOptions,
     ToolBase,
 } from './base';
+export {
+    DEFAULT_READ_CHUNK_SIZE,
+    ExecResult,
+    DirEntry,
+    normalizeNewlines,
+    BackendBase,
+    LocalBackend,
+} from './backend';
 export { JSONSchemaNode, removeSchemaTitles } from './utils';
 export { RegisteredToolOptions, RegisteredTool, ToolChoice } from './types';
 export {
@@ -31,7 +39,9 @@ export {
     FunctionTool,
 } from './function-tool';
 export { Toolkit } from './toolkit';
-export { Bash } from './bash';
+export { BashToolOptions, BashTool, Bash } from './bash';
+export { PowerShellToolOptions, PowerShellTool, PowerShell } from './powershell';
+export { BashCommandParser } from './bash-parser';
 export { Read } from './read';
 export { Write } from './write';
 export { Edit } from './edit';

@@ -11,7 +11,7 @@ import { StdioMCPClient } from '../mcp/stdio';
 import type { ToolCallBlock } from '../message/block';
 import type { ToolInputSchema, ToolSchema } from '../type';
 import type { Tool } from './base';
-import { createToolResponse, isToolResponse, ToolResponse } from './response';
+import { createToolResponse, isToolResponse, ToolChunk, ToolResponse } from './response';
 
 interface RegisteredTool extends Tool {
     type: 'function' | 'mcp';
@@ -229,7 +229,9 @@ Usage:
             } else if (Symbol.asyncIterator in res) {
                 // If res is an AsyncGenerator of string or ToolResponse
                 const accContent: ToolResponse['content'] = [];
-                let nextResult = await (res as AsyncGenerator<string | ToolResponse>).next();
+                let nextResult = await (
+                    res as AsyncGenerator<string | ToolChunk | ToolResponse>
+                ).next();
 
                 while (!nextResult.done) {
                     const currentValue = nextResult.value;
@@ -259,6 +261,18 @@ Usage:
                             type: 'text',
                             text: currentValue,
                         });
+                    } else if (currentValue instanceof ToolChunk) {
+                        const itemRes = createToolResponse({
+                            content: currentValue.content,
+                            state:
+                                currentValue.state === 'running' && isLastValue
+                                    ? 'success'
+                                    : currentValue.state,
+                            metadata: currentValue.metadata,
+                            isLast: currentValue.isLast ?? isLastValue,
+                        });
+                        yield itemRes;
+                        accContent.push(...currentValue.content);
                     } else if (isToolResponse(currentValue)) {
                         // Use the isLast from the ToolResponse if set, otherwise use our calculated value
                         currentValue.isLast = currentValue.isLast ?? isLastValue;
@@ -275,7 +289,7 @@ Usage:
             } else if (Symbol.iterator in res) {
                 // If res is a Generator of string or ToolResponse
                 const accContent: ToolResponse['content'] = [];
-                let nextResult = (res as Generator<string | ToolResponse>).next();
+                let nextResult = (res as Generator<string | ToolChunk | ToolResponse>).next();
 
                 while (!nextResult.done) {
                     const currentValue = nextResult.value;
@@ -304,6 +318,18 @@ Usage:
                             type: 'text',
                             text: currentValue,
                         });
+                    } else if (currentValue instanceof ToolChunk) {
+                        const itemRes = createToolResponse({
+                            content: currentValue.content,
+                            state:
+                                currentValue.state === 'running' && isLastValue
+                                    ? 'success'
+                                    : currentValue.state,
+                            metadata: currentValue.metadata,
+                            isLast: currentValue.isLast ?? isLastValue,
+                        });
+                        yield itemRes;
+                        accContent.push(...currentValue.content);
                     } else if (isToolResponse(currentValue)) {
                         // Use the isLast from the ToolResponse if set, otherwise use our calculated value
                         currentValue.isLast = currentValue.isLast ?? isLastValue;
