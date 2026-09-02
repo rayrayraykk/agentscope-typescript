@@ -5,6 +5,13 @@ export type {
     AnthropicClient,
     AnthropicParameters,
 } from './anthropic-model';
+export { GeminiChatModel, flattenJSONSchema, sanitizeSchemaForGemini } from './gemini-model';
+export type {
+    GeminiChatModelOptions,
+    GeminiClient,
+    GeminiParameters,
+    GeminiRequest,
+} from './gemini-model';
 export { ModelCard, EmbeddingModelCard, TTSModelCard, createModelCard } from './card';
 export type {
     AnyModelCard,
