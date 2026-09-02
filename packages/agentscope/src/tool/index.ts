@@ -39,6 +39,8 @@ export {
     FunctionTool,
 } from './function-tool';
 export { Toolkit } from './toolkit';
+export { ToolGroupMCPClient, ToolGroupOptions, ToolGroup } from './tool-group';
+export { DEFAULT_META_TOOL_RESPONSE_TEMPLATE, ResetTools, SkillViewer } from './meta';
 export { BashToolOptions, BashTool, Bash } from './bash';
 export { PowerShellToolOptions, PowerShellTool, PowerShell } from './powershell';
 export { BashCommandParser } from './bash-parser';
