@@ -6,11 +6,19 @@ import path from 'node:path';
 import {
     AnthropicChatFormatter,
     AnthropicMultiAgentFormatter,
+    DashScopeChatFormatter,
+    DashScopeMultiAgentFormatter,
+    DeepSeekChatFormatter,
+    DeepSeekMultiAgentFormatter,
     FormatterBase,
     GeminiChatFormatter,
     GeminiMultiAgentFormatter,
     MoonshotChatFormatter,
     MoonshotMultiAgentFormatter,
+    OllamaChatFormatter,
+    OllamaMultiAgentFormatter,
+    OpenAIChatFormatter,
+    OpenAIMultiAgentFormatter,
     OpenAIResponseFormatter,
     OpenAIResponseMultiAgentFormatter,
 } from '../../src/formatter';
@@ -47,12 +55,32 @@ function formatterCases(): Array<[string, FormatterBase, Msg[]]> {
     const chat = fixture.chat_messages.map(parseMsg);
     const multi = fixture.multi_messages.map(parseMsg);
     return [
+        ['openai_chat', new OpenAIChatFormatter(), chat],
+        ['openai_multi', new OpenAIMultiAgentFormatter(), multi],
         ['anthropic_chat', new AnthropicChatFormatter(), chat],
         ['anthropic_multi', new AnthropicMultiAgentFormatter(), multi],
         ['gemini_chat', new GeminiChatFormatter(), chat],
         ['gemini_multi', new GeminiMultiAgentFormatter(), multi],
         ['moonshot_chat', new MoonshotChatFormatter(), chat],
         ['moonshot_multi', new MoonshotMultiAgentFormatter(), multi],
+        ['ollama_chat', new OllamaChatFormatter(), chat],
+        ['ollama_multi', new OllamaMultiAgentFormatter(), multi],
+        [
+            'dashscope_chat',
+            new DashScopeChatFormatter({
+                inputTypes: [
+                    'text/plain',
+                    'image/*',
+                    'audio/*',
+                    'video/*',
+                    'application/x-thinking',
+                ],
+            }),
+            chat,
+        ],
+        ['dashscope_multi', new DashScopeMultiAgentFormatter(), multi],
+        ['deepseek_chat', new DeepSeekChatFormatter(), chat],
+        ['deepseek_multi', new DeepSeekMultiAgentFormatter(), multi],
         ['openai_response', new OpenAIResponseFormatter(), chat],
         ['openai_response_multi', new OpenAIResponseMultiAgentFormatter(), multi],
     ];
