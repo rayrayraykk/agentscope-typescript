@@ -9,6 +9,8 @@ import {
     FormatterBase,
     GeminiChatFormatter,
     GeminiMultiAgentFormatter,
+    MoonshotChatFormatter,
+    MoonshotMultiAgentFormatter,
 } from '../../src/formatter';
 import { Msg, parseMsg } from '../../src/message';
 
@@ -47,6 +49,8 @@ function formatterCases(): Array<[string, FormatterBase, Msg[]]> {
         ['anthropic_multi', new AnthropicMultiAgentFormatter(), multi],
         ['gemini_chat', new GeminiChatFormatter(), chat],
         ['gemini_multi', new GeminiMultiAgentFormatter(), multi],
+        ['moonshot_chat', new MoonshotChatFormatter(), chat],
+        ['moonshot_multi', new MoonshotMultiAgentFormatter(), multi],
     ];
 }
 
