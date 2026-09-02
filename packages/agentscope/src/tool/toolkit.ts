@@ -391,10 +391,10 @@ Usage:
             });
         }
 
-        return {
+        return createToolResponse({
             ...finalRes,
             content: cleanedContent,
-        };
+        });
     }
 
     /**
