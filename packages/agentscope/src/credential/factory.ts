@@ -2,6 +2,7 @@
 
 import {
     registerChatModelResolver,
+    registerEmbeddingModelResolver,
     type CredentialBase,
     type CredentialClass,
     type CredentialSchema,
@@ -65,4 +66,20 @@ registerChatModelResolver(async provider => {
     if (provider === 'openai_chat') return (await import('../model/openai-model')).OpenAIChatModel;
     if (provider === 'xai') return (await import('../model/xai-model')).XAIChatModel;
     throw new Error(`No chat model class is registered for '${provider}'.`);
+});
+
+registerEmbeddingModelResolver(async provider => {
+    if (provider === 'dashscope') {
+        return (await import('../embedding/dashscope')).DashScopeEmbeddingModel;
+    }
+    if (provider === 'gemini') {
+        return (await import('../embedding/gemini')).GeminiEmbeddingModel;
+    }
+    if (provider === 'ollama') {
+        return (await import('../embedding/ollama')).OllamaEmbeddingModel;
+    }
+    if (provider === 'openai') {
+        return (await import('../embedding/openai')).OpenAIEmbeddingModel;
+    }
+    throw new Error(`No embedding model class is registered for '${provider}'.`);
 });

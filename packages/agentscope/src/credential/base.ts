@@ -1,6 +1,8 @@
 /* eslint-disable jsdoc/require-jsdoc */
 
 import { _generateId } from '../_utils/common';
+import type { EmbeddingModelBase } from '../embedding/base';
+import { embeddingModelOrder } from '../embedding/card-order';
 import type { ChatModelBase } from '../model/base';
 import type { AnyModelCard, EmbeddingModelCard, ModelCard, TTSModelCard } from '../model/card';
 import { listModelCards } from '../model/card-registry';
@@ -12,8 +14,10 @@ export interface CredentialOptions {
 
 export type CredentialSchema = Record<string, unknown>;
 export type ChatModelClass = abstract new (...args: never[]) => ChatModelBase;
+export type EmbeddingModelClass = abstract new (...args: never[]) => EmbeddingModelBase;
 
 let chatModelResolver: ((provider: string) => Promise<ChatModelClass>) | null = null;
+let embeddingModelResolver: ((provider: string) => Promise<EmbeddingModelClass>) | null = null;
 
 /** Shared credential identity and model-card discovery behavior. */
 export abstract class CredentialBase {
@@ -38,6 +42,14 @@ export abstract class CredentialBase {
         return chatModelResolver(this.chatProvider);
     }
 
+    getEmbeddingModelClass(): Promise<EmbeddingModelClass | null> {
+        if (this.embeddingProvider === null) return Promise.resolve(null);
+        if (!embeddingModelResolver) {
+            throw new Error('Embedding model registry is not initialized.');
+        }
+        return embeddingModelResolver(this.embeddingProvider);
+    }
+
     listTTSModels(): TTSModelCard[] {
         if (this.ttsProvider === null) return [];
         return listModelCards({ kind: 'tts', provider: this.ttsProvider }) as TTSModelCard[];
@@ -45,10 +57,15 @@ export abstract class CredentialBase {
 
     listEmbeddingModels(): EmbeddingModelCard[] {
         if (this.embeddingProvider === null) return [];
-        return listModelCards({
+        const cards = listModelCards({
             kind: 'embedding',
             provider: this.embeddingProvider,
         }) as EmbeddingModelCard[];
+        return cards.sort(
+            (left, right) =>
+                embeddingModelOrder(this.embeddingProvider as string, left.name) -
+                embeddingModelOrder(this.embeddingProvider as string, right.name)
+        );
     }
 
     abstract toJSON(): Record<string, unknown>;
@@ -58,6 +75,12 @@ export function registerChatModelResolver(
     resolver: (provider: string) => Promise<ChatModelClass>
 ): void {
     chatModelResolver = resolver;
+}
+
+export function registerEmbeddingModelResolver(
+    resolver: (provider: string) => Promise<EmbeddingModelClass>
+): void {
+    embeddingModelResolver = resolver;
 }
 
 export interface CredentialClass<T extends CredentialBase = CredentialBase> {

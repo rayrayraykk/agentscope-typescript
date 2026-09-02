@@ -11,6 +11,7 @@ import {
     OllamaCredential,
     OpenAICredential,
 } from './providers';
+import { GeminiEmbeddingModel } from '../embedding/gemini';
 import { GeminiChatModel } from '../model/gemini-model';
 
 describe('CredentialFactory', () => {
@@ -63,6 +64,24 @@ describe('CredentialFactory', () => {
     test('resolves the Python-compatible chat model class lazily', async () => {
         const credential = new GeminiCredential({ apiKey: 'secret' });
         expect(await credential.getChatModelClass()).toBe(GeminiChatModel);
+    });
+
+    test('resolves the Python-compatible embedding model class lazily', async () => {
+        const credential = new GeminiCredential({ apiKey: 'secret' });
+        expect(await credential.getEmbeddingModelClass()).toBe(GeminiEmbeddingModel);
+        class UnsupportedCredential extends CredentialBase {
+            readonly type = 'unsupported';
+            readonly chatProvider = 'unsupported';
+
+            constructor() {
+                super();
+            }
+
+            toJSON(): Record<string, unknown> {
+                return { type: this.type };
+            }
+        }
+        expect(await new UnsupportedCredential().getEmbeddingModelClass()).toBeNull();
     });
 
     test('validates discriminators and required API keys', () => {
