@@ -129,12 +129,18 @@ Usage:
         tools
             .filter(
                 tool =>
-                    !(enabledTools && !enabledTools.includes(tool.name)) &&
+                    !(
+                        enabledTools &&
+                        !enabledTools.includes(tool.originalName) &&
+                        !enabledTools.includes(tool.name)
+                    ) &&
+                    !disabledTools.includes(tool.originalName) &&
                     !disabledTools.includes(tool.name)
             )
             .forEach(tool => {
                 this.tools.push(
                     Object.assign(tool, {
+                        name: tool.originalName,
                         type: 'mcp' as const,
                         mcpName: client.name,
                         requireUserConfirm,
